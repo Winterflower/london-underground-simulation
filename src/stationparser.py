@@ -42,14 +42,16 @@ def parse_graph_edges(fileobject):
             source=line_elements[0].rstrip().lstrip()
             edge_string_elements=line_elements[1].split(',')
             for station in edge_string_elements:
+                target=station.split('(')[0].rstrip().lstrip()
                 lines=station.split('(')[1].split(')')[0].split(';')
                 print lines
                 for line in lines:
-                    temp_edge=edge.Edge(source,station,line)
+                    temp_edge=edge.Edge(source,target,line)
                     edges.append(temp_edge)
+    return edges
 
 tubeedges=open('londontubes.txt', 'r')
-parse_graph_edges(tubeedges)
+edges=parse_graph_edges(tubeedges)
 
 
 def parse_graph_forvisualization(graphobject):
@@ -64,20 +66,34 @@ def parse_graph_forvisualization(graphobject):
     for station in mapping.keys():
         newnode=mapping[station]
         oldnode=graphobject.lookupnode(station)
-        for neighbour in oldnode.neighbours:
-            graph.add_edge(newnode,mapping[neighbour.name])
+        #for neighbour in oldnode.neighbours:
+        #    graph.add_edge(newnode,mapping[neighbour.name])
     return graph, mapping, index_name_mapping
 
 graph, mapping, index_name=parse_graph_forvisualization(tubemap)
 
+def add_edges(graph, list_of_edges, station_mapping):
+    edge_mapping={}
+    for edge in list_of_edges:
+        source_string=edge.source
+        source_vertex=station_mapping[source_string]
+        target_string=edge.target
+        target_vertex=station_mapping[target_string]
+        line_string=edge.line
+        tempedge=graph.add_edge(source_vertex, target_vertex)
+        edge_mapping[graph.edge_index[tempedge]]=line_string
+    return edge_mapping
+edge_map=add_edges(graph,edges,mapping)
+
+
 
 print "Finding the shortest path"
-
-
-vertices, edges=shortest_path(graph, mapping["Baker Street"], mapping["Canary Wharf"])
+vertices, edges=shortest_path(graph, mapping["Baker Street"], mapping["Liverpool Street"])
 print "Printing path"
 for station in vertices:
     print index_name[graph.vertex_index[station]]
+for edge in edges:
+    print "Line: ", edge_map[graph.edge_index[edge]]
 
 
 
