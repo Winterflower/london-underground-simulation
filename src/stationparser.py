@@ -6,6 +6,8 @@ import re
 import edge
 from graph_tool.all import *
 from graph_tool.topology import shortest_path
+from bokeh.plotting import *
+import numpy as np
 
 def parse_graph(fileobject):
     graphoject=graph.Graph()
@@ -86,6 +88,23 @@ def add_edges(graph, list_of_edges, station_mapping):
 edge_map=add_edges(graph,edges,mapping)
 
 
+####################################################
+#DATA ANALYSIS ON THE GRAPH
+####################################################
+
+#calculate out-degree
+out_degree={}
+out_degree_array=[]
+for vertex in graph.vertices():
+    out_degree[int(vertex)]=vertex.out_degree()
+    out_degree_array.append(vertex.out_degree())
+print out_degree_array
+
+
+
+
+
+
 
 print "Finding the shortest path"
 vertices, edges=shortest_path(graph, mapping["Baker Street"], mapping["Liverpool Street"])
@@ -94,6 +113,45 @@ for station in vertices:
     print index_name[graph.vertex_index[station]]
 for edge in edges:
     print "Line: ", edge_map[graph.edge_index[edge]]
+
+
+
+#################################
+#BOKEH VISUALIATION
+################################
+
+def stationlocationparser(fileobject):
+    station_name=[]
+    station_long=[]
+    station_lat=[]
+    for line in fileobject:
+        if line[0]!="#":
+            line_elements=line.split(",")
+            station_name.append(line_elements[3])
+            station_long.append(float(line_elements[2]))
+            station_lat.append(float(line_elements[1]))
+    return station_name,station_long, station_lat
+
+
+tubefile=open("geographic.txt", 'r')
+parsed_tuple=stationlocationparser(tubefile)
+
+
+output_file("londontubenew.html", title="London tube example HTML")
+
+TOOLS="pan,wheel_zoom,box_zoom,reset,hover,save"
+
+p = figure(title="The London Underground", tools=TOOLS)
+palette=["#feebe2","#fbb4b9", "#f768a1","#ae017e","#7a0177"]
+min_out=min(out_degree_array)
+max_out=max(out_degree_array)
+color_index=[int(4*(x-min_out)/(max_out-min_out)) for x in out_degree_array]
+color_map=[palette[i] for i in color_index]
+
+p.circle(parsed_tuple[1],parsed_tuple[2], color=color_map, fill_alpha=0.8, size=10, line_color="black")
+
+show(p)
+
 
 
 
