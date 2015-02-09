@@ -3,6 +3,7 @@ __author__ = 'winterflower'
 import station
 import graph
 import re
+import edge
 from graph_tool.all import *
 from graph_tool.topology import shortest_path
 
@@ -34,6 +35,21 @@ for node in tubemap.nodes:
 
 def parse_graph_edges(fileobject):
     #creates edge objects to be passed to the grapher
+    edges=[]
+    for line in fileobject:
+        if line[0]!="#":
+            line_elements=re.split('\t*',line.rstrip())
+            source=line_elements[0].rstrip().lstrip()
+            edge_string_elements=line_elements[1].split(',')
+            for station in edge_string_elements:
+                lines=station.split('(')[1].split(')')[0].split(';')
+                print lines
+                for line in lines:
+                    temp_edge=edge.Edge(source,station,line)
+                    edges.append(temp_edge)
+
+tubeedges=open('londontubes.txt', 'r')
+parse_graph_edges(tubeedges)
 
 
 def parse_graph_forvisualization(graphobject):
