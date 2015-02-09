@@ -32,30 +32,36 @@ for node in tubemap.nodes:
     if None in node.neighbours:
         print "Contains NONE: ", node.name
 
+def parse_graph_edges(fileobject):
+    #creates edge objects to be passed to the grapher
 
 
 def parse_graph_forvisualization(graphobject):
     graph=Graph()
     mapping={}
+    index_name_mapping={}
     for vertex in graphobject.nodes:
         node=graph.add_vertex()
         mapping[vertex.name]=node
+        index_name_mapping[graph.vertex_index[node]]=vertex.name
     #create the neighbours
     for station in mapping.keys():
         newnode=mapping[station]
         oldnode=graphobject.lookupnode(station)
         for neighbour in oldnode.neighbours:
             graph.add_edge(newnode,mapping[neighbour.name])
-    return graph, mapping
+    return graph, mapping, index_name_mapping
 
-graph, mapping=parse_graph_forvisualization(tubemap)
+graph, mapping, index_name=parse_graph_forvisualization(tubemap)
 
 
 print "Finding the shortest path"
 
 
-vertices, edges=shortest_path(graph, mapping["Baker Street"], mapping["Aldgate"])
-print vertices
+vertices, edges=shortest_path(graph, mapping["Baker Street"], mapping["Canary Wharf"])
+print "Printing path"
+for station in vertices:
+    print index_name[graph.vertex_index[station]]
 
 
 
