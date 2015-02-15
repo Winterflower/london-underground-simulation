@@ -27,6 +27,13 @@ def parse_file(filename):
             stations.append(station)
     return stations
 def lookupstation(listofstations, station_name):
+    """
+
+    :param listofstations:
+    :param station_name:
+    :return:
+    Returns the station object is a station with that name exists, otherwise returns -1
+    """
     found=False
     for station_object in listofstations:
         if station_object.name == listofstations:
