@@ -5,6 +5,7 @@ __author__ = 'winterflower'
 from bokeh.plotting import *
 import numpy as np
 import pandas as pd
+import stationparser
 
 
 def stationlocationparser(fileobject):
@@ -28,7 +29,7 @@ output_file("londontube.html", title="London tube example HTML")
 
 TOOLS="pan,wheel_zoom,box_zoom,reset,hover,save"
 
-p = figure(title="London tube simulation", tools=TOOLS)
+p = figure(title="The London Underground", tools=TOOLS)
 
 p.circle(-0.1331, 51, size=9, color='red')
 
