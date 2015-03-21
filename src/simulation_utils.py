@@ -18,9 +18,9 @@ class Commuter:
       source_vertex=station_name_index[self.source.name]
       target_vertex=station_name_index[self.destination.name]
       #print "Checking the map"
-      self.shortest_path_vertex_list=shortest_path(self.map.graph_object,source_vertex, target_vertex)
+      self.shortest_path_edge_list=shortest_path(self.map.graph_object,source_vertex, target_vertex)
       list=[]
-      for element in self.shortest_path_vertex_list:
+      for element in self.shortest_path_edge_list:
           list=[element]+list
       return list
     #print type(self.shortest_path_vertex_list)
