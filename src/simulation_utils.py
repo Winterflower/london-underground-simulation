@@ -8,7 +8,7 @@ class Commuter:
       self.destination=destination_station_object
       self.map=map
       self.shortest_path=self.create_shortest_path()
-      print self.shortest_path
+      self.shortest_path.reverse()
       #potential race condition and might break in the future
       self.current_station=self.shortest_path.pop()
       #print self.current_station
