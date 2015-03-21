@@ -3,11 +3,12 @@ __author__ = 'winterflower'
 from graph_tool.topology import *
 
 class Commuter:
-  def __init__(self, source, destination, map):
-      self.source=source
-      self.destination=destination
+  def __init__(self, source_station_object, destination_station_object, map):
+      self.source=source_station_object
+      self.destination=destination_station_object
       self.map=map
       self.shortest_path=self.create_shortest_path()
+      print self.shortest_path
       #potential race condition and might break in the future
       self.current_station=self.shortest_path.pop()
       #print self.current_station
