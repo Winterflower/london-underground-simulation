@@ -7,8 +7,18 @@ class Commuter:
       self.source=source_station_object
       self.destination=destination_station_object
       self.map=map
-      self.shortest_path=self.create_shortest_path()
-      self.shortest_path.reverse()
+      try:
+        self.shortest_path=self.create_shortest_path()
+        self.shortest_path.reverse()
+        if len(self.shortest_path)==0:
+            print "Lenght  0"
+            print self.source.name
+            print self.destination.name
+      except:
+          print "Shortest path was created incorrectly"
+          print "Source"
+          print self.source.name
+          print self.destination.name
       #potential race condition and might break in the future
       self.current_station=self.shortest_path.pop()
       #print self.current_station
