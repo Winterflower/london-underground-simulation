@@ -1,8 +1,10 @@
 __author__ = 'winterflower'
 
-from station import Station
+#from station import Station
 import re
 from graph_tool.all import *
+import simulation_utils as st
+
 
 def parse_file(filename):
     """
@@ -15,7 +17,7 @@ def parse_file(filename):
     for line in datafile:
         if line[0]!="#":
             line_elements=re.split('\t*',line.rstrip())
-            station=Station(line_elements[0].lstrip().rstrip())
+            station=st.Station(line_elements[0].lstrip().rstrip())
             #parse the edges and turn into dict
             neighbours={}
             edge_string_elements=line_elements[1].split(',')
@@ -55,7 +57,7 @@ def createmap(list_of_station_objects):
         station_propertymap[vertex]=station
         name_index[station.name]=vertex
         station.set_vertex_descriptor(vertex)
-    return graphobject, station_propertymap,name_index, list_of_stations
+    return graphobject, station_propertymap, name_index, list_of_station_objects
 
 
 def create_edges(graphobject, list_of_station_objects,name_index):
@@ -78,14 +80,5 @@ def create_edges(graphobject, list_of_station_objects,name_index):
                 edge_propertymap[edge]=tubeline
     return graphobject, edge_propertymap
 
-############
-#Some test code
-##############
 
-list_of_stations=parse_file('data/londontubes.txt')
-graph, station_prop_map, name_index, list_of_stations = createmap(list_of_stations)
-finalgraph, edge_props = create_edges(graph, list_of_stations,name_index)
 
-for edge in name_index["Acton Town"].out_edges():
-    print(edge)
-    print edge_props[edge]
