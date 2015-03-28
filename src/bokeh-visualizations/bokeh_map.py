@@ -114,9 +114,9 @@ def bokeh_animated_colours(data_source):
     print glyph_renderer
     figure_data_source=glyph_renderer[0].data_source
     while True:
-        figure_data_source.data["size"]=np.random.random_sample(length)
+        figure_data_source.data["size"]=np.random.randint(5,25,length)
         cursession().store_objects(figure_data_source)
-        time.sleep(0.05)
+        time.sleep(0.1)
 
 
 
