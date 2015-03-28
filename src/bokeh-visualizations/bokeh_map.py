@@ -1,8 +1,10 @@
 __author__ = 'winterflower'
 
-from bokeh.plotting import figure, output_file, show
+from bokeh.plotting import figure, output_file, show, output_server, cursession
 from bokeh.models import ColumnDataSource
+import time
 import sys
+import numpy as np
 sys.path.append("/home/winterflower/programming_projects/python-londontube/data")
 
 def parse_input_file(filename):
@@ -89,9 +91,42 @@ def bokeh_zone_colour_map(data_source):
     zonecolour_tubemap.circle(data_source.data["longitudes"], data_source.data["latitudes"], size=10, color=data_source.data["colours"], alpha=0.8)
     show(zonecolour_tubemap)
 
+def bokeh_animated_colours(data_source):
+    """
+    Creates a coloured map of London tube stations by zone where the size of the tube station changes
+    according to the number of people on the station
+    :param data_source:
+    :return:
+    """
+    print "Please make sure the bokeh-server is running before you run the script"
+    output_server("bokeh_tube_stations")
+    TOOLS="resize,hover,save"
+    animated_figure=figure(title="London Underground", tools=TOOLS)
+    animated_figure.plot_height=1000
+    animated_figure.plot_width=1000
+    length=len(data_source.data["longitudes"])
+    size=[10 for i in range(length)]
+    animated_figure.circle(data_source.data["longitudes"], data_source.data["latitudes"], size=size, color=data_source.data["colours"], alpha=0.8, name="circle")
+    show(animated_figure)
+
+    #obtain the glyph renderer
+    glyph_renderer=animated_figure.select((dict(name="circle")))
+    print glyph_renderer
+    figure_data_source=glyph_renderer[0].data_source
+    while True:
+        figure_data_source.data["size"]=np.random.random_sample(length)
+        cursession().store_objects(figure_data_source)
+        time.sleep(0.05)
+
+
+
+
 
 
 data_file="/home/winterflower/programming_projects/python-londontube/src/data/london_stations.csv"
+"""
 bokeh_main_map(parse_input_file(data_file))
 bokeh_zone_colour_map(parse_input_file(data_file))
+"""
 
+bokeh_animated_colours(parse_input_file(data_file))
