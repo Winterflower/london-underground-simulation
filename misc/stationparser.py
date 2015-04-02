@@ -8,6 +8,7 @@ from graph_tool.all import *
 from graph_tool.topology import shortest_path
 from bokeh.plotting import *
 import numpy as np
+import pandas as pd
 
 def parse_graph(fileobject):
     graphoject=graph.Graph()
@@ -29,7 +30,7 @@ def parse_graph(fileobject):
         graphoject.nodes[i].neighbours=neighbour_nodes
     return graphoject
 
-tubelines=open('londontubes.txt', 'r')
+tubelines=open('data/londontubes.txt', 'r')
 tubemap=parse_graph(tubelines)
 for node in tubemap.nodes:
     if None in node.neighbours:
@@ -52,7 +53,7 @@ def parse_graph_edges(fileobject):
                     edges.append(temp_edge)
     return edges
 
-tubeedges=open('londontubes.txt', 'r')
+tubeedges=open('data/londontubes.txt', 'r')
 edges=parse_graph_edges(tubeedges)
 
 
@@ -105,14 +106,14 @@ print out_degree_array
 
 
 
-
-print "Finding the shortest path"
-vertices, edges=shortest_path(graph, mapping["Baker Street"], mapping["Liverpool Street"])
-print "Printing path"
-for station in vertices:
-    print index_name[graph.vertex_index[station]]
-for edge in edges:
-    print "Line: ", edge_map[graph.edge_index[edge]]
+def find_shortest_path(source, destination):
+    print "Finding the shortest path"
+    vertices, edges=shortest_path(graph, mapping[source], mapping[destination])
+    print "Printing path"
+    for station in vertices:
+        print index_name[graph.vertex_index[station]]
+    for edge in edges:
+        print "Line: ", edge_map[graph.edge_index[edge]]
 
 
 
@@ -142,13 +143,17 @@ output_file("londontubenew.html", title="London tube example HTML")
 TOOLS="pan,wheel_zoom,box_zoom,reset,hover,save"
 
 p = figure(title="The London Underground", tools=TOOLS)
-palette=["#feebe2","#fbb4b9", "#f768a1","#ae017e","#7a0177"]
+palette=["#feb24c","#fd8d3c", "#fc4e2a", "#e31a1c", "#b10026"]
 min_out=min(out_degree_array)
 max_out=max(out_degree_array)
 color_index=[int(4*(x-min_out)/(max_out-min_out)) for x in out_degree_array]
 color_map=[palette[i] for i in color_index]
 
 p.circle(parsed_tuple[1],parsed_tuple[2], color=color_map, fill_alpha=0.8, size=10, line_color="black")
+p.xaxis.axis_label="Latitude"
+p.yaxis.axis_label="Longitude"
+p.grid.grid_line_color="white"
+p.background_fill= "#cccccc"
 
 show(p)
 
