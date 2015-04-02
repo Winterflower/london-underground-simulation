@@ -6,11 +6,8 @@ The Tube Map object contains:
 4. list of Station objects
 5. A name_index dict to facilitate looking up Vertices based on Strings
 """
-try:
-    import parsedata
-    import commuter
-except:
-    print "Please make sure the parsedata and commuter modules have installed and configured correctly"
+
+import parsedata
 
 
 
@@ -24,10 +21,4 @@ class Map():
                                                                        self.station_name_index)
 
 
-
-
-
-
-map = Map('data/londontubes.txt')
-map.initialise_map()
   
