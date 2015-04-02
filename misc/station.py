@@ -4,12 +4,10 @@ Learned about the __eq_method from http://stackoverflow.com/questions/390250/ele
 """
 
 import numpy as np
-try:
-    import commuter
-except:
-    print "Please make sure the commuter module is imported and configured correctly"
+import commuter
 
-class Station():
+
+class Station:
     def __init__(self, name):
         self.name=name
         self.number_of_initial_commuters=0
@@ -35,3 +33,6 @@ class Station():
         self.number_of_current_commuters=self.number_of_current_commuters-1
 
 
+
+hello="hello"
+new_station=Station("hello")
