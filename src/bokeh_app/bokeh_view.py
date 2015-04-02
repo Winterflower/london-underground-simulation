@@ -125,7 +125,7 @@ class SlidersApp(HBox):
                                       )
 
         obj.text = TextInput(
-            title="title", name='title', value='my sine wave'
+            title="title", name='title', value='Enter station name'
         )
 
 
@@ -140,6 +140,9 @@ class SlidersApp(HBox):
                       tools=toolset,
                       title=obj.text.value,
         )
+
+        plot.xaxis.axis_label = 'Longitude'
+        plot.yaxis.axis_label = 'Latitude'
 
         # Plot the line by the x,y values in the source property
         plot.circle('longitudes', 'latitudes', fill_color='colours', source=obj.source,
@@ -184,7 +187,7 @@ class SlidersApp(HBox):
             new : new value of attr
         """
         self.update_data()
-        self.plot.title = self.text.value
+        self.plot.title = "Removed station " + self.text.value
 
     def update_data(self):
         """Called each time that any watched property changes.
