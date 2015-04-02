@@ -23,6 +23,7 @@ def filter_by_station_name(name_string, map_object, original_data_source):
     #unset a previous vertex filter
 
     #create vertex filtering property map
+    map_object.graph_object.set_vertex_filter(None)
     filterer_property_map=map_object.graph_object.new_vertex_property("boolean")
     #populate the filterer
     for vertex in map_object.graph_object.vertices():
