@@ -1,0 +1,3 @@
+"""
+Mandatory init file
+"""
