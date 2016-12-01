@@ -1,5 +1,0 @@
-#Station Neighbour(line)
-Acton Town	        Chiswick Park (District), South Ealing (Picadilly), Turnham Green (Picadilly), Ealing Common (District; Picadilly)
-Aldgate		        Tower Hill (Circle; District), Liverpool Street (Metropolitan; Circle; District)
-Aldgate East	    Tower Hill (District), Liverpool Street (HammersmithCity; Metropolitan), Whitechapel (District; HammersmithCity)
-Alperton	        Sudbury Town (Picadilly), Park Royal (Picadilly)
