@@ -3,6 +3,14 @@ Author: Camilla Montonen
 Description: Train object
 """
 import simpy
+from src.monitoring.monitor_utils import patch_resource
+from functools import partial
+
+def monitor_train(datalist, space):
+    datapoint=(space._env.now,
+               space.count,
+               len(space.queue))
+    datalist.append(datapoint)
 
 class Train(object):
     def __init__(self, capacity, simpy_env):
@@ -10,6 +18,7 @@ class Train(object):
         self.capacity = capacity
         self.space = simpy.Resource( self.env, capacity=self.capacity)
         self.arrival_events={}
+        self.enable_monitor=True
         
     def _initialise_arrival_events(self):
         for station in self.stations:
@@ -17,6 +26,12 @@ class Train(object):
 
     def set_stations(self,station_list):
         self.stations=station_list
+
+    def start_monitor(self, data):
+        if self.enable_monitor:
+            print 'Initialising monitor func'
+            self.monitor_func = partial(monitor_train, data)
+            patch_resource(self.space, post=self.monitor_func)
 
     def onboard_customer(self, customer):
         '''Checks the customers destination and register it as a callback in arrival events'''

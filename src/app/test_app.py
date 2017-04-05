@@ -32,9 +32,11 @@ def initialise_commuters(n, stationsdict, env):
         commuter_list[source.name]+=1
     return result, commuter_list
 
-def main(commuters=10, sim_max_time=40, train_capacity=800):
+def main(commuters=10, sim_max_time=700, train_capacity=800):
     env = Environment()
+    data=[]
     train = Train(train_capacity, env)
+    train.start_monitor(data)
     station_objs = convert_to_station_obj(TUBELINES['Jubilee'], env)
     train.set_stations(station_objs.values())
     commuters, stats = initialise_commuters( commuters, station_objs, env )
@@ -44,8 +46,8 @@ def main(commuters=10, sim_max_time=40, train_capacity=800):
         env.process(station.train_arrives(train))
     for commuter in commuters:
         env.process(commuter.request_train_space(train))
-    print stats
     env.run(until=sim_max_time)
+    print '****DATA*****', data
 
 def create_parser():
     parser = argparse.ArgumentParser(description='Simulate a Jubilee Line journey.')
