@@ -6,16 +6,18 @@ demo/testing.
 
 from functools import partial, wraps
 import simpy
+import logging
 
 def patch_resource(resource, pre=None, post=None):
     def get_wrapper(func):
         @wraps(func)
         def wrapper(*args, **kwargs):
             if pre:
+                logging.info('Calling pre function')
                 pre(resource) 
             ret = func(*args, **kwargs)
             if post:
-                print 'Calling post function'
+                logging.info('Calling post function')
                 post(resource)
             return ret
         return wrapper

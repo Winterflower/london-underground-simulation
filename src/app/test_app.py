@@ -6,6 +6,7 @@ sys.path.append("/home/camilla/development/python/london-underground-simulation/
 from src.lib.station import Station
 from src.lib.train import Train
 from src.lib.commuter import Commuter
+from src.monitoring.monitor_utils import patch_resource
 from data.tubelines import TUBELINES
 import simpy
 from simpy.core import Environment
