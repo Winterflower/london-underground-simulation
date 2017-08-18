@@ -4,6 +4,8 @@ Description: Library file that represents a Station object on the London undergr
 """
 import simpy
 from simpy.events import Event
+import numpy.random as nr
+import pdb
 
 class Station(object):
     def __init__(self, name, env):
@@ -16,6 +18,11 @@ class Station(object):
             print 'Station: Train arrived'
             self.board_commuters(trainobj)
     def board_commuters(self, trainobj):
-        for commuter in self.commuters:
-            trainobj.onboard_customer(commuter)
-        print 'Station: Finished onboarding customers'
+        if self.commuters:
+            remaining_space = min(trainobj.capacity - trainobj.space.count, len(self.commuters))
+            boarding_commuters = nr.choice(self.commuters, remaining_space, replace=False)
+            for commuter in boarding_commuters:
+                trainobj.onboard_customer(commuter)
+            print 'Station: Finished onboarding customers'
+        else:
+            print 'Empty station: {0}'.format(self.name)
