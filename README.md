@@ -7,5 +7,5 @@ Warning: This repository is undergoing some major changes as I migrate the simul
 
 ## Dependencies
 
-- Sympy
+- Simpy
 - Python ( see src.app.test_app.py)
