@@ -5,6 +5,7 @@ Description: Train object
 import simpy
 from src.monitoring.monitor_utils import patch_resource
 from functools import partial
+import pdb
 
 def monitor_train(datalist, space):
     datapoint=(space._env.now,
@@ -19,13 +20,17 @@ class Train(object):
         self.space = simpy.Resource( self.env, capacity=self.capacity)
         self.arrival_events={}
         self.enable_monitor=True
-        
+
     def _initialise_arrival_events(self):
         for station in self.stations:
             self.arrival_events[station.name]=simpy.events.Event(self.env) #create an event with callbacks
 
-    def set_stations(self,station_list):
+    def _set_stations(self,station_list):
         self.stations=station_list
+
+    def initialise(self, station_list):
+        self._set_stations(station_list)
+        self._initialise_arrival_events()
 
     def start_monitor(self, data):
         if self.enable_monitor:
@@ -37,6 +42,8 @@ class Train(object):
         '''Checks the customers destination and register it as a callback in arrival events'''
         customer.train_arrived.succeed()
         event = self.arrival_events[customer.destination.name]
+        if event.callbacks is None:
+            pdb.set_trace()
         event.callbacks.append(customer.arrived_at_station)
         print 'Train: Successfully registered customer %s with destination %s' %(customer.id_number, customer.destination.name)
 
@@ -50,15 +57,15 @@ class Train(object):
             ev = self.arrival_events[station.name]
             print ev.callbacks
             ev.succeed(value=self) #send the train object back to the customer
-            station.train_arrival.succeed() 
+            station.train_arrival.succeed()
             print 'Train: Current capacity at %s' % self.space.count
-            
-            
+
+
 
 
 
 
 """
-When train arrives at station trigger the arrival even for that station, 
+When train arrives at station trigger the arrival even for that station,
 each commuter should store a reference to this even
 """

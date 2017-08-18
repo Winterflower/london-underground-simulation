@@ -20,8 +20,7 @@ class TestTrain(unittest2.TestCase):
         env = simpy.Environment()
         capacity=3
         train = Train(capacity,env)
-        station_list=[ Station('Marylebone'), Station('Baker Street'), Station('Bond Street') ]
-        train.set_stations(station_list)
+        station_list=[ Station('Marylebone', env), Station('Baker Street', env), Station('Bond Street', env) ]
+        train.initialise(station_list)
         env.process(train.run())
         env.run(until=10)
-
