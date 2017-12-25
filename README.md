@@ -9,3 +9,7 @@ Warning: This repository is undergoing some major changes as I migrate the simul
 
 - Simpy
 - Python ( see src.app.test_app.py)
+
+## Changelog
+
+25 Dec 2017 Moving to Gitflow
