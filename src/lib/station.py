@@ -13,6 +13,7 @@ class Station(object):
         self.commuters=[]
         self.env=env
         self.train_arrival = Event(self.env)
+        self.train_leaves = Event(self.env)
     def train_arrives(self, trainobj):
             yield self.train_arrival
             print 'Station: Train arrived'

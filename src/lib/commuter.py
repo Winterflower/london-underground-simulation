@@ -17,11 +17,12 @@ class Commuter(object):
     def arrived_at_station(self, event):
         print 'Commuter %s: Train has arrived at destination' % self.id_number
         self.env.process(self.leave_train(event))
-    
+
     def leave_train(self,event):
         yield Release(event.value.space, self.request )
         print 'Commuter %s: Has left train.' % self.id_number
-        
+        self.train_arrived=Event(self.env) #for multistage journeys re-initialise the arrived event
+
     def request_train_space(self, train_object):
         """
 
@@ -35,8 +36,3 @@ class Commuter(object):
         print 'Commuter: Submitting request for space'
         yield request
         print 'Commuter: Received space on train'
-
-
-
-
-
