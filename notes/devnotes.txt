@@ -1,1 +1,33 @@
-### Developer Notes
+### Developer Notes v.0.1.0
+
+### Commuter
+A commuter object represents one person commuting in the London underground.
+A commuter has a unique id and references to the source and destination stations.
+It also has a reference to the simpy env object and an event object that represents the arrival of a train.
+
+The commuter flow is as follows:
+1. Commuter yields the train arrival event and waits for it to be triggered.
+2. Once train arrives, commuter accesses the train_object (passed in as a parameter to the function)
+and makes a request for space.
+3. When space is granted, the request_train_space method completes. This is the only method from the commuter class
+that is directly called by the main application.
+4. Commuter has an `arrived_at_station` event, which is triggered by the train's arrival. This method schedules
+a new env process.
+
+### Station
+
+A station object represents one station on the London Underground.
+A station has a name and a reference to the Simpy environment. It also has a list of commuters (to represent the
+commuters standing on the station's platform at any one time).
+It also has `train_arrival` and `train_leaving` events.
+The station yields the `train_arrival` event and waits for it to be triggered. Then it boards customers by triggering
+the train_obj.onboard_commuter method and passes in the customer as argument.
+
+### Train
+
+A train object represents a single train on the London Underground.
+A train object has capacity (how many people can fit into a train), a ref to a simpy environment,
+a dictionary mapping for arrival_events. In the constructor, we populate this dict with a mapping
+from station name to arrival event. When a commuter is onboarded, we check his or her destination, get the arrival
+event that will be triggered when the train arrives at this station. We trigger all of the callback events to succeed
+and then we also trigger the station's train arrival event to succeed.
